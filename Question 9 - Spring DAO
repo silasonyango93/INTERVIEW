@@ -1,0 +1,155 @@
+
+
+The importance of this layered approach is to decouple your business logic from your database transactions, thus facilitating 
+issues like tests e.t.c
+
+
+
+SPRING DEMONSTRATION
+********************
+
+JdbcTemplate Class
+
+The JDBC Template class executes SQL queries, updates statements, stores procedure calls, performs iteration over ResultSets,
+and extracts returned parameter values. It also catches JDBC exceptions and translates them to the generic, more informative,
+exception hierarchy defined in the org.springframework.dao package.
+Below is a code snippet
+
+import java.util.List;
+import javax.sql.DataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+public class StudentJDBCTemplate implements StudentDAO {
+   private DataSource dataSource;
+   private JdbcTemplate jdbcTemplateObject;
+   
+   public void setDataSource(DataSource dataSource) {
+      this.dataSource = dataSource;
+      this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+   }
+   public void create(String name, Integer age) {
+      String SQL = "insert into Student (name, age) values (?, ?)";
+      jdbcTemplateObject.update( SQL, name, age);
+      System.out.println("Created Record Name = " + name + " Age = " + age);
+      return;
+   }
+   public Student getStudent(Integer id) {
+      String SQL = "select * from Student where id = ?";
+      Student student = jdbcTemplateObject.queryForObject(SQL, 
+         new Object[]{id}, new StudentMapper());
+      
+      return student;
+   }
+   
+   
+   
+   Data Access Object (DAO)
+   ************************
+   DAO stands for Data Access Object, which is commonly used for database interaction. DAOs exist to provide a means to read
+   and write data to the database and they should expose this functionality through an interface by which the rest of the
+   application will access them.
+   The DAO support in Spring makes it easy to work with data access technologies like JDBC, Hibernate, JPA, or JDO in a
+   consistent way.
+   
+   import java.util.List;
+import javax.sql.DataSource;
+
+public interface StudentDAO {
+   /** 
+      * This is the method to be used to initialize
+      * database resources ie. connection.
+   */
+   public void setDataSource(DataSource ds);
+   
+   /** 
+      * This is the method to be used to create
+      * a record in the Student table.
+   */
+   public void create(String name, Integer age);
+   
+   /** 
+      * This is the method to be used to list down
+      * a record from the Student table corresponding
+      * to a passed student id.
+   */
+   public Student getStudent(Integer id);
+   
+   /** 
+      * This is the method to be used to list down
+      * all the records from the Student table.
+   */
+   
+   
+   
+   Normal java object class(POJO)
+   ******************************
+   A POJO is also required
+   
+   public class Student {
+   private Integer age;
+   private String name;
+   private Integer id;
+
+   public void setAge(Integer age) {
+      this.age = age;
+   }
+   public Integer getAge() {
+      return age;
+   }
+   public void setName(String name) {
+      this.name = name;
+   }
+   public String getName() {
+      return name;
+   }
+   
+
+
+
+Mapper Class
+**************
+A mapper class is also required
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import org.springframework.jdbc.core.RowMapper;
+
+public class StudentMapper implements RowMapper<Student> {
+   public Student mapRow(ResultSet rs, int rowNum) throws SQLException {
+      Student student = new Student();
+      student.setId(rs.getInt("id"));
+      student.setName(rs.getString("name"));
+      student.setAge(rs.getInt("age"));
+      
+      return student;
+   }
+}
+
+
+Bean.xml
+*********
+And of course the bean.xml configuration to supply a DataSource to the JDBC Template so it can configure itself to get
+database access. 
+
+<?xml version = "1.0" encoding = "UTF-8"?>
+<beans xmlns = "http://www.springframework.org/schema/beans"
+   xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance" 
+   xsi:schemaLocation = "http://www.springframework.org/schema/beans
+   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd ">
+
+   <!-- Initialization for data source -->
+   <bean id="dataSource" 
+      class = "org.springframework.jdbc.datasource.DriverManagerDataSource">
+      <property name = "driverClassName" value = "com.mysql.jdbc.Driver"/>
+      <property name = "url" value = "jdbc:mysql://localhost:3306/TEST"/>
+      <property name = "username" value = "root"/>
+      <property name = "password" value = "password"/>
+   </bean>
+
+   <!-- Definition for studentJDBCTemplate bean -->
+   <bean id = "studentJDBCTemplate" 
+      class = "com.tutorialspoint.StudentJDBCTemplate">
+      <property name = "dataSource" ref = "dataSource" />    
+   </bean>
+      
+</beans>
