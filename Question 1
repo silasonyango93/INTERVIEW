@@ -1,0 +1,8 @@
+MVC is a software design pattern for developing web applications.A Model View Controller pattern is made up of the
+following three parts :-
+
+    Model − It is the lowest level of the pattern responsible for maintaining data.
+
+    View − It is responsible for displaying all or a portion of the data to the user.
+
+    Controller − It is a software Code that controls the interactions between the Model and View.
