@@ -1,0 +1,21 @@
+
+
+ Indexes are used to quickly locate data without having to search every row in a database table every time a database table
+ is accessed. Indexes can be created using one or more columns of a database table, providing the basis for both rapid random
+ lookups and efficient access of ordered records.
+ 
+ They improve performance by helping the system to quickly locate data without having to search every row in a database table
+ every time a database table is accessed.
+ Most database software includes indexing technology that enables sub-linear time lookup to improve performance, as linear
+ search is inefficient for large databases. 
+ 
+ Consider the following SQL statement: SELECT first_name FROM people WHERE last_name = 'Smith';. To process this statement 
+ without an index the database software must look at the last_name column on every row in the table (this is known as a full
+ table scan). With an index the database simply follows the B-tree data structure until the Smith entry has been found;
+ this is much less computationally expensive than a full table scan. 
+ 
+ Reason indices not added to all data tables
+ *******************************************
+ Indexes take up space in memory (RAM); Too many or too large of indexes and the DB is going to have to be swapping them to
+ and from the disk. They also increase insert and delete time (each index must be updated for every piece of data
+ inserted/deleted/updated). 
