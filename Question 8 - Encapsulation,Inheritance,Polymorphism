@@ -1,0 +1,135 @@
+
+ENCAPSULATION
+*************
+
+Encapsulation in Java is a mechanism of wrapping the data (variables) and code acting on the data (methods) together as a 
+single unit. In encapsulation, the variables of a class will be hidden from other classes, and can be accessed only through
+the methods of their current class. Therefore, it is also known as data hiding.
+Example : -
+
+public class EncapTest {
+   private String name;
+   private String idNum;
+   private int age;
+
+   public int getAge() {
+      return age;
+   }
+
+   public String getName() {
+      return name;
+   }
+
+   public String getIdNum() {
+      return idNum;
+   }
+
+   public void setAge( int newAge) {
+      age = newAge;
+   }
+
+   public void setName(String newName) {
+      name = newName;
+   }
+
+   public void setIdNum( String newId) {
+      idNum = newId;
+   }
+}
+
+
+
+
+
+POLYMORPHISM
+************
+Polymorphism is the ability of an object to take on many forms.
+The most common use of polymorphism in OOP occurs when a parent class reference is used to refer to a child class object.
+
+Any Java object that can pass more than one IS-A test is considered to be polymorphic. In Java, all Java objects are 
+polymorphic since any object will pass the IS-A test for their own type and for the class Object.
+
+
+
+public class Employee {
+   private String name;
+   private String address;
+   private int number;
+
+   public Employee(String name, String address, int number) {
+      
+   }
+
+   public void mailCheck() {
+      System.out.println("Mailing a check to " + this.name + " " + this.address);
+   }
+ 
+}
+
+
+
+
+public class Salary extends Employee {
+   private double salary; // Annual salary
+   
+   public Salary(String name, String address, int number, double salary) {
+      super(name, address, number);
+      setSalary(salary);
+   }
+   
+   public void mailCheck() {
+      System.out.println("Within mailCheck of Salary class ");
+      System.out.println("Mailing check to " + getName()
+      + " with salary " + salary);
+   }
+   
+  }
+  
+  
+  
+  
+  public class VirtualDemo {
+
+   public static void main(String [] args) {
+      Salary s = new Salary("Mohd Mohtashim", "Ambehta, UP", 3, 3600.00);
+      Employee e = new Salary("John Adams", "Boston, MA", 2, 2400.00);
+      System.out.println("Call mailCheck using Salary reference --");   
+      s.mailCheck();
+      System.out.println("\n Call mailCheck using Employee reference--");
+      e.mailCheck();
+   }
+}
+
+
+In the VirtualDemo class on line 95, you can see a salary object being created using an Employee reference.
+At line 99, we are calling the mailCheck() using the Employee reference.However, it is the mailCheck() at the
+Salary class that is invoked
+
+
+
+
+MULTIPLE INHERITANCE IN JAVA
+****************************
+Multiple inheritance in java is achieved using Interfaces.Java unlike C++, does not directly support multiple inheritance.
+A class can implement more than one interfaces.
+E.g
+
+public interface Football extends Sports {
+   public void homeTeamScored(int points);
+   public void visitingTeamScored(int points);
+   public void endOfQuarter(int quarter);
+}
+
+// Filename: Hockey.java
+public interface Hockey extends Sports {
+   public void homeGoalScored();
+   public void visitingGoalScored();
+   public void endOfPeriod(int period);
+   public void overtimePeriod(int ot);
+}
+
+public class Player implements Football,Hockey{
+
+//class logic
+
+}
