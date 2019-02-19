@@ -1,0 +1,21 @@
+ArrayList is better for storing and accessing data.Manipulation with ArrayList is slow because it internally uses array.
+If any element is removed from the array, all the bits are shifted in memory.
+Arraylist maintain indices like arrays. So if want more frequent get operations than put then arraylist is best to go. 
+
+Uses
+****
+ArrayList can be used to store  records eg names of people and also makes it easy to retrieve the names using its indices.
+ArrayList is also important in creating a collection of items E.g creating a java object containing a user's details and
+then you can declare an ArrayList of type user object to store these collections.
+
+
+LinkedList is better for manipulating data.Manipulation with LinkedList is faster than ArrayList because it uses doubly
+linked list so no bit shifting is required in memory.
+LinkedList maintain pointers to elements. you can't to a specific index like in arraylist. But the advantage here in linkedlist
+is that they don't need to shift back and forth like in arraylist to maintain continues indices. So get operations in linkedlist
+are costly as you would have to go through pointers to reach your elements. But put operations are good as compared to arraylist.
+you just need to connect to pointers and that's it.
+
+uses
+****
+Linked list is effecient in an operation like changing the spelling of a name in the list
