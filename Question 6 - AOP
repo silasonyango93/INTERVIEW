@@ -1,0 +1,36 @@
+
+
+
+Spring AOP module provides interceptors to intercept an application. For example, when a method is executed, you can
+add extra functionality before or after the method execution.
+
+The logic to check whether parameters passed to the functions are valid, will be written as a piece of code called an advice.
+An advice is the actual action to be taken either before or after the method execution.
+
+Types of advice
+***************
+before - Run advice before the a method execution.
+after - Run advice after the method execution, regardless of its outcome.
+after-returning - Run advice after the a method execution only if method completes successfully.
+after-throwing - Run advice after the a method execution only if method exits by throwing an exception.
+around - Run advice before and after the advised method is invoked.
+
+For our case, we should use the before type of advice to conduct the check just before the methods are executed.
+
+There are also pointcuts which is is a set of one or more join points where an advice should be executed. You can specify 
+pointcuts using expressions or patterns.
+
+The code snippet below is an example.
+
+<aop:config>
+      <aop:aspect id = "check" ref = "Parameter check">
+         <aop:pointcut id = "selectAll" 
+            expression = "execution(* com.silasonyango.Student.save*(..))"/>
+         <aop:before pointcut-ref = "selectAll" method = "beforeAdvice"/>
+      </aop:aspect>
+</aop:config>
+
+public void beforeAdvice(){
+  //This is the method containing the parameter check logic
+      System.out.println("Checking to see if parameters passed are valid.");
+}
