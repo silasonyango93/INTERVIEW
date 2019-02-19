@@ -1,0 +1,11 @@
+
+1. SQL databases are relational databases i.e data is organised into tables that are linked, while in NoSql, data is organised
+into objects.
+2. SQL databases use the Structured Query Language(SQL) to perform CRUD operations while NOSQL does not use SQL.Instead,
+the system traverses through the objects while performing CRUD operations.
+
+If you need a Database to store structured data and use the powers and maturity of SQL and all the SQL echo-system and your system
+is transaction-intensive, go for SQL.
+
+If you need is more around something more specific needs such as data caching, indexing or specific storage like linked data
+or unstructured data go for NoSQL
