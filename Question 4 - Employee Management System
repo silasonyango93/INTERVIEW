@@ -1,0 +1,72 @@
+
+ContractInformation.java
+************************
+
+
+public class ContractInformation{
+
+private String type,whenSigned,expiryDate;
+
+public ContractInformation(String type,String whenSigned,String expiryDate){
+ this.type=type;
+ this.whenSigned=whenSigned;
+ this.expiryDate=expiryDate;
+ 
+}
+
+public String getContractType(){return this.type;}
+
+public String getContractSignedDate(){return this.whenSigned;}
+
+public String getContractExpiryDate(){return this.expiryDate;}
+
+
+}
+
+
+
+**********************************************************************************************************************
+
+
+Employee.java
+**************
+
+
+public class Employee{
+private String strName,strDOB,strUID,strAddress,strWhenSigned,strExpiryDate;
+private ArrayList<ContractInformation> contractInformation;
+
+public Employee(String strName,String strDOB,String strUID,String strAddress,ArrayList<ContractInformation> contractInformation)
+{
+this.strName=strName;
+this.strDOB=strDOB;
+this.strUID=strUID;
+this.strAddress=strAddress;
+this.strWhenSigned=strWhenSigned;
+this.strExpiryDate=strExpiryDate;
+this.contractInformation=contractInformation;
+
+
+
+}
+public String getName()
+{return strName;}
+
+public String getstrDOB()
+{return strDOB;}
+
+public String getstrUID()
+{return strUID;}
+
+public String getstrWhenSigned()
+{return strWhenSigned;}
+
+public String getstrAddress()
+{return strAddress;}
+
+public ArrayList<ContractInformation> getContractInformation()
+{return contractInformation;}
+
+
+
+}
