@@ -1,0 +1,28 @@
+
+
+Advantages of Spring Framework
+******************************
+
+1.Spring provides an abstraction layer on existing technologies like servlets, jsps, jdbc, jndi, rmi, jms and Java mail etc.,
+to simplify the develpment process.
+
+2.Spring comes with some of the existing technologies like ORM framework, logging framework, J2EE and JDK Timers etc,
+Hence we don’t need to integrate explicitly those technologies.
+
+3.Spring framework includes support for managing business objects and exposing their services to the presentation tier
+components, so that the web and desktop applications can access the same objects.
+
+4.Spring application can be used for the development of different kind of applications, like standalone applications,
+standalone GUI applications, Web applications and applets as well.
+
+5.Spring provides a light weight container which can be activaed without using webserver or application server.
+
+
+
+Examples of projects using Spring Framework
+**********************************************
+DELFI-http://www.delfi.ee/
+
+IDG-http://www.cw.no/
+
+AlloCiné : Cinéma, Séries TV, Stars, Vidéos, DVD et VOD-http://www.allocine.fr/
