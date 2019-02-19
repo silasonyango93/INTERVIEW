@@ -1,0 +1,314 @@
+
+
+
+1.Transparent Persistence
+Hibernate’s transparent persistence ensures automatic connection between the application’s objects with the database tables.
+This feature prevents developers from writing lines of connection code. Transparent persistence enables hibernate to reduce
+the development time and maintenance cost.
+
+2.Database independent
+Hibernate is database independent. It can be used to connect with any database like Oracle, MySQL, Sybase and DB2 to name a few.
+This cross database portability of Hibernate is easily achieved by changing a parameter ‘database dialect’ in the configuration
+file. Database independency is considered as one of the major advantages of Hibernate.
+
+3.HQL
+Hibernate supports a powerful query language called HQL (Hibernate Query Language). This query language is more powerful than SQL
+and is completely object oriented. HQL’s advanced features like pagination and dynamic profiling are not present in SQL.
+HQL can be used to implement some of the prominent object oriented concepts like inheritance, polymorphism and association.
+
+4.Dual-layer Caching
+Hibernate supports both first level and second level caching mechanisms. The first level caching is associated with Session 
+object which is used by default. The second level caching is associated with Session Factory object.Through caching concept, 
+Hibernate retains the objects in cache so as to reduce repeated hits to the database. This feature makes Hibernate highly
+scalable and optimizes the application’s performance.
+
+5.Version Property
+Hibernate supports optimistic locking through its version property feature. This functionality supports multiple transactions
+without affecting one another.For example, when two or more users try to alter a database entity at the same time, the version 
+field avoids the conflict and gives preference to the user who commits the changes first. The other user will be prompted with
+an error message and will be asked to restart the process.
+
+6.Scalability
+Hibernate is highly scalable. It adapts itself in any environment. It may be an intranet application with few hundreds of 
+users or large critical application with thousands of users. Hibernate supports both the applications equally.
+
+7.Easy to Learn
+Hibernate is developer friendly. It is easy to learn and implement. As the framework takes care of the changes made to
+the database automatically, a developer’s work is reduced to a great extent.
+
+
+Spring ORM Maven dependencies
+*****************************
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>hu.daniel.hari.learn.spring</groupId>
+	<artifactId>Tutorial-SpringORMwithTX</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<properties>
+		<!-- Generic properties -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.7</java.version>
+
+		<!-- SPRING & HIBERNATE / JPA -->
+		<spring.version>4.0.0.RELEASE</spring.version>
+		<hibernate.version>4.1.9.Final</hibernate.version>
+
+	</properties>
+
+	<dependencies>
+		<!-- LOG -->
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+
+		<!-- Spring -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-orm</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+
+		<!-- JPA Vendor -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
+		</dependency>
+
+		<!-- IN MEMORY Database and JDBC Driver -->
+		<dependency>
+			<groupId>hsqldb</groupId>
+			<artifactId>hsqldb</artifactId>
+			<version>1.8.0.7</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
+
+
+
+Spring ORM Model Class
+**********************
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+public class Product {
+
+	@Id
+	private Integer id;
+	private String name;
+
+	public Product() {
+	}
+
+	public Product(Integer id, String name) {
+		this.id = id;
+		this.name = name;
+	}
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "Product [id=" + id + ", name=" + name + "]";
+	}
+
+}
+
+
+
+Spring ORM DAO Class
+********************
+import hu.daniel.hari.learn.spring.orm.model.Product;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class ProductDao {
+
+	@PersistenceContext
+	private EntityManager em;
+
+	public void persist(Product product) {
+		em.persist(product);
+	}
+
+	public List<Product> findAll() {
+		return em.createQuery("SELECT p FROM Product p").getResultList();
+	}
+
+}
+
+
+
+
+
+Spring ORM Service Class
+**************************
+import hu.daniel.hari.learn.spring.orm.dao.ProductDao;
+import hu.daniel.hari.learn.spring.orm.model.Product;
+
+import java.util.Collection;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+@Component
+public class ProductService {
+
+	@Autowired
+	private ProductDao productDao;
+
+	@Transactional
+	public void add(Product product) {
+		productDao.persist(product);
+	}
+	
+	@Transactional
+	public void addAll(Collection<Product> products) {
+		for (Product product : products) {
+			productDao.persist(product);
+		}
+	}
+
+	@Transactional(readOnly = true)
+	public List<Product> listAll() {
+		return productDao.findAll();
+
+	}
+
+}
+
+
+Spring ORM Example Bean Configuration XML
+******************************************
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.0.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		">
+	
+	<!-- Scans the classpath for annotated components that will be auto-registered as Spring beans -->
+	<context:component-scan base-package="hu.daniel.hari.learn.spring" />
+	<!-- Activates various annotations to be detected in bean classes e.g: @Autowired -->
+	<context:annotation-config />
+
+	<bean id="dataSource" class=" org.springframework.jdbc.datasource.DriverManagerDataSource ">
+		<property name="driverClassName" value="org.hsqldb.jdbcDriver" />
+		<property name="url" value="jdbc:hsqldb:mem://productDb" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
+	</bean>
+	
+	<bean id="entityManagerFactory" 
+			class=" org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean "
+			p:packagesToScan="hu.daniel.hari.learn.spring.orm.model"
+            p:dataSource-ref="dataSource"
+			>
+		<property name="jpaVendorAdapter">
+			<bean class=" org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter ">
+				<property name="generateDdl" value="true" />
+				<property name="showSql" value="true" />
+			</bean>
+		</property>
+	</bean>
+
+	<!-- Transactions -->
+	<bean id="transactionManager" class=" org.springframework.orm.jpa.JpaTransactionManager ">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+	<!-- enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+</beans>
+
+
+
+
+Spring ORM Hibernate JPA Example Test Program
+*************************************************
+public class SpringOrmMain {
+	
+	public static void main(String[] args) {
+		
+		//Create Spring application context
+		ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext("classpath:/spring.xml");
+		
+		//Get service from context. (service's dependency (ProductDAO) is autowired in ProductService)
+		ProductService productService = ctx.getBean(ProductService.class);
+		
+		//Do some data operation
+		
+		productService.add(new Product(1, "Bulb"));
+		productService.add(new Product(2, "Dijone mustard"));
+		
+		System.out.println("listAll: " + productService.listAll());
+		
+		//Test transaction rollback (duplicated key)
+		
+		try {
+			productService.addAll(Arrays.asList(new Product(3, "Book"), new Product(4, "Soap"), new Product(1, "Computer")));
+		} catch (DataAccessException dataAccessException) {
+		}
+		
+		//Test element list after rollback
+		System.out.println("listAll: " + productService.listAll());
+		
+		ctx.close();
+		
+	}
+}
+
+**************************************************
